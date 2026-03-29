@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Our Services – EduCraft Solutions{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+    <div class="ph-bg"><div class="ph-shape ps1"></div><div class="ph-shape ps2"></div></div>
+    <div class="container">
+        <div class="page-hero-content">
+            <div class="section-tag" style="margin:0 auto 1rem">⚡ Our Services</div>
+            <h1>Comprehensive <span class="text-gradient">Education Services</span></h1>
+            <p>From academic research to global admissions — we offer a complete suite of education consulting services.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="services-detail-grid">
+            <div class="sd-card">
+                <div class="sd-icon" style="--clr:#26a69a"><i class="fas fa-book-open"></i></div>
+                <h3>Basic Research</h3>
+                <p>Ideal for UG/PG students starting their research journey.</p>
+                <ul class="sd-list">
+                    <li><i class="fas fa-check"></i> Topic finalization support</li>
+                    <li><i class="fas fa-check"></i> Basic research drafting</li>
+                    <li><i class="fas fa-check"></i> 1 plagiarism check (Turnitin) < 20%</li>
+                    <li><i class="fas fa-check"></i> Limited revisions (1-2)</li>
+                    <li><i class="fas fa-check"></i> Standard delivery timeline</li>
+                </ul>
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-sm">Enquire Now</a>
+            </div>
+            
+            <div class="sd-card">
+                <div class="sd-icon" style="--clr:#1a73e8"><i class="fas fa-microscope"></i></div>
+                <h3>Applied Research</h3>
+                <p>Designed for serious researchers and PG students.</p>
+                <ul class="sd-list">
+                    <li><i class="fas fa-check"></i> In-depth research & technical writing</li>
+                    <li><i class="fas fa-check"></i> Plagiarism below 12%</li>
+                    <li><i class="fas fa-check"></i> Methodology + data interpretation</li>
+                    <li><i class="fas fa-check"></i> Conference shortlisting support</li>
+                    <li><i class="fas fa-check"></i> Multiple revisions (3-4)</li>
+                    <li><i class="fas fa-check"></i> Faster delivery than Basic</li>
+                </ul>
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-sm">Enquire Now</a>
+            </div>
+            
+            <div class="sd-card">
+                <div class="sd-icon" style="--clr:#f4511e"><i class="fas fa-award"></i></div>
+                <h3>Advanced Research</h3>
+                <p>End-to-end premium research support for PhD scholars and corporates.</p>
+                <ul class="sd-list">
+                    <li><i class="fas fa-check"></i> High impact & technical paper writing</li>
+                    <li><i class="fas fa-check"></i> Plagiarism below 8%</li>
+                    <li><i class="fas fa-check"></i> Scopus / SCI / Web of Science targeting</li>
+                    <li><i class="fas fa-check"></i> Unlimited revisions & priority delivery</li>
+                    <li><i class="fas fa-check"></i> Submission & reviewer comment support</li>
+                </ul>
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-sm">Enquire Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== POLICY ===== -->
+<section class="section" style="background: var(--bg-alt); padding: 4rem 0;">
+    <div class="container">
+        <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+            <h2>Our <span class="text-gradient">Service Policies</span></h2>
+            <p style="color: var(--text-muted); max-width: 620px; margin: 0 auto; font-size: 1.05rem;">Transparency and commitment are at the core of our services. Please review our policies below.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.5rem;">
+            <div class="sd-card" style="background: #fff; padding: 1.5rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem;"><i class="fas fa-undo"></i> Revision Policy</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Revisions are provided strictly based on original requirement parameters. Any new requirements will be treated as a new task.</p>
+            </div>
+            <div class="sd-card" style="background: #fff; padding: 1.5rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem;"><i class="fas fa-ban"></i> Cancellation</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Cancellation is only possible within 24 hours of task confirmation. Partial refunds may apply depending on the work completed.</p>
+            </div>
+            <div class="sd-card" style="background: #fff; padding: 1.5rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem;"><i class="fas fa-lock"></i> Confidentiality</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">All shared documents, data, and personal information are kept strictly confidential and will never be shared with third parties.</p>
+            </div>
+            <div class="sd-card" style="background: #fff; padding: 1.5rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem;"><i class="fas fa-clock"></i> Timelines</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Estimated timelines are shared upfront. Expedited delivery is available for certain packages at an additional cost.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-banner">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Not Sure Which Service You Need?</h2>
+            <p>Talk to our expert counselors for free and we'll guide you to the right path.</p>
+            <div class="cta-actions">
+                <a href="{{ url_for('contact') }}" class="btn btn-white btn-lg"><i class="fas fa-phone"></i> Free Consultation</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

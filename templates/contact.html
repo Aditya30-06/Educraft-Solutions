@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}Contact Us – EduCraft Solutions{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+    <div class="ph-bg"><div class="ph-shape ps1"></div><div class="ph-shape ps2"></div></div>
+    <div class="container">
+        <div class="page-hero-content">
+            <div class="section-tag" style="margin:0 auto 1rem">📞 Contact Us</div>
+            <h1>Get in Touch with Our <span class="text-gradient">Education Experts</span></h1>
+            <p>Have questions about studying abroad or our services? We'd love to hear from you. Book a free consultation today!</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Reach Us Directly</h3>
+                <div class="ci-items">
+                    <div class="ci-item">
+                        <div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <strong>Head Office</strong>
+                            <p>1/191, Ground Floor, Subhash Nagar,<br>New Delhi – 110027, India</p>
+                        </div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <strong>Phone / WhatsApp</strong>
+                            <p><a href="tel:+919821693299">+91 9821693299</a></p>
+                        </div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <strong>Email</strong>
+                            <p><a href="mailto:pshiksha4.0@gmail.com">pshiksha4.0@gmail.com</a></p>
+                        </div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <strong>Office Hours</strong>
+                            <p>Monday – Saturday: 9 AM – 7 PM<br>Sunday: 10 AM – 2 PM (Appointment only)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="social-links" style="margin-top:2rem">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/919821693299" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="contact-form-wrap">
+                <h3>Send Us a Message</h3>
+                <form class="contact-form" method="POST" action="{{ url_for('contact') }}" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-user"></i>
+                                <input type="text" name="name" placeholder="Your name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" name="phone" placeholder="+91 ..." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Service Interested In</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-list"></i>
+                                <select name="service" class="form-select">
+                                    <option value="">Select service</option>
+                                    <option>Overseas Education</option>
+                                    <option>Research Consulting</option>
+                                    <option>Visa Assistance</option>
+                                    <option>Test Preparation</option>
+                                    <option>Scholarship Guidance</option>
+                                    <option>SOP / Essay Writing</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Message *</label>
+                        <div class="input-wrap">
+                            <textarea name="message" rows="5" placeholder="Tell us about your education goals and how we can help..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label style="font-weight: 600; margin-bottom: 8px; display: block;">Upload Document (PDF, DOC, DOCX) <span style="color:var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="documentUpload" name="document" accept=".pdf,.doc,.docx" class="file-upload-input">
+                            <label for="documentUpload" class="file-upload-box" id="uploadBox">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <span class="upload-text">Drag & drop your file here or <strong>Click to browse</strong></span>
+                                <span class="upload-filename" id="uploadFilename">No file selected</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section">
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.6!2d77.1!3d28.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSubhash+Nagar%2C+New+Delhi!5e0!3m2!1sen!2sin!4v1"
+        width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.file-upload-wrapper { position: relative; width: 100%; margin-top: 8px; }
+.file-upload-input { position: absolute; width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; z-index: -1; }
+.file-upload-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 2.5rem 1.5rem; background: rgba(26,60,110,0.03); border: 2px dashed rgba(26,60,110,0.25);
+    border-radius: 12px; cursor: pointer; transition: all 0.3s ease; text-align: center;
+}
+.file-upload-box:hover, .file-upload-box.dragover { background: rgba(26,60,110,0.06); border-color: var(--primary); }
+.upload-icon { font-size: 2.8rem; color: var(--teal); margin-bottom: 1rem; transition: transform 0.3s ease; }
+.file-upload-box:hover .upload-icon { transform: translateY(-5px); }
+.upload-text { font-size: 0.95rem; color: var(--text); margin-bottom: 0.8rem; }
+.upload-text strong { color: var(--primary); text-decoration: underline; }
+.upload-filename {
+    font-size: 0.85rem; color: var(--text-muted); background: #fff; padding: 5px 14px;
+    border-radius: 20px; border: 1px solid var(--border); display: inline-block;
+    max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.upload-filename.has-file { color: var(--teal); border-color: var(--teal); background: rgba(38,166,154,0.1); font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const fileInput = document.getElementById('documentUpload');
+    const filenameDisplay = document.getElementById('uploadFilename');
+    const uploadBox = document.getElementById('uploadBox');
+
+    fileInput.addEventListener('change', function(e) {
+        if(this.files && this.files.length > 0) {
+            filenameDisplay.textContent = this.files[0].name;
+            filenameDisplay.classList.add('has-file');
+        } else {
+            filenameDisplay.textContent = 'No file selected';
+            filenameDisplay.classList.remove('has-file');
+        }
+    });
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadBox.addEventListener(eventName, preventDefaults, false);
+    });
+    function preventDefaults (e) { e.preventDefault(); e.stopPropagation(); }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadBox.addEventListener(eventName, () => uploadBox.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadBox.addEventListener(eventName, () => uploadBox.classList.remove('dragover'), false);
+    });
+
+    uploadBox.addEventListener('drop', function(e) {
+        let dt = e.dataTransfer;
+        let files = dt.files;
+        if(files.length > 0) {
+            fileInput.files = files;
+            const event = new Event('change');
+            fileInput.dispatchEvent(event);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Overseas Enquiries – Admin{% endblock %}
+{% block page_title %}Overseas Enquiries{% endblock %}
+
+{% block content %}
+
+<!-- Google Sheets Banner -->
+<div class="sheets-banner" style="margin-bottom:1.25rem">
+    <div class="sheets-banner-text">
+        <div class="sheets-logo"><i class="fas fa-globe"></i></div>
+        <div>
+            <strong>🌍 Overseas Enquiries — Live in Google Sheets</strong>
+            <span>New enquiries auto-sync to Sheet 2 every time a user submits the enquiry form.</span>
+        </div>
+    </div>
+    <div class="sheets-actions">
+        {% if gsheet_configured %}
+        <form method="POST" action="{{ url_for('admin_sync_sheets') }}" style="display:inline">
+            <button type="submit" class="btn-sync-sheet"><i class="fas fa-sync-alt"></i> Sync</button>
+        </form>
+        {% endif %}
+        <a href="{{ google_sheet_url }}" target="_blank" class="btn-open-sheet">
+            <i class="fas fa-table"></i> Click to See Live Data
+        </a>
+    </div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+    <h3 style="color:var(--primary);font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+        <i class="fas fa-globe" style="color:var(--teal)"></i>
+        All Overseas Enquiries
+        <span class="badge b-teal">{{ enquiries|length }}</span>
+    </h3>
+</div>
+
+{% if enquiries %}
+    {% for e in enquiries %}
+    <div class="msg-card {% if not e.is_read %}unread{% endif %}">
+
+        <!-- Top row -->
+        <div class="msg-top">
+            <div>
+                <div class="msg-name">{{ e.name }}</div>
+                <div class="msg-email">
+                    <a href="mailto:{{ e.email }}" style="color:var(--teal)">{{ e.email }}</a>
+                    {% if e.phone %} &nbsp;·&nbsp; {{ e.phone }}{% endif %}
+                </div>
+            </div>
+            {% if e.country %}<span class="badge b-teal">{{ e.country }}</span>{% endif %}
+            {% if e.course %}<span class="badge b-muted">{{ e.course }}</span>{% endif %}
+            {% if e.budget %}<span class="badge b-orange">{{ e.budget }}</span>{% endif %}
+            {% if not e.is_read %}<span class="badge b-red">NEW</span>{% endif %}
+            <span class="msg-time">
+                <i class="fas fa-clock" style="margin-right:.28rem"></i>{{ e.submitted_at.strftime('%d %b %Y, %I:%M %p') }}
+            </span>
+        </div>
+
+        <!-- Message body -->
+        {% if e.message %}
+        <div class="msg-text">{{ e.message }}</div>
+        {% else %}
+        <div class="msg-text" style="font-style:italic;opacity:.55">No additional message provided.</div>
+        {% endif %}
+
+        <!-- Action buttons -->
+        <div class="msg-acts">
+            <button class="act-btn act-info" onclick="toggleReply('enq-{{ e.id }}')">
+                <i class="fas fa-reply"></i> Reply via Email
+            </button>
+            <a href="mailto:{{ e.email }}?subject=Re%3A%20Your%20Study%20Abroad%20Enquiry%20%E2%80%93%20EduCraft%20Solutions&body=Hi%20{{ e.name | urlencode }}%2C%0A%0AThank%20you%20for%20your%20enquiry%20about%20studying%20in%20{{ e.country | urlencode }}.%0A%0A"
+               class="act-btn act-success">
+                <i class="fas fa-envelope"></i> Open in Mail
+            </a>
+            <form method="POST" action="{{ url_for('admin_delete_enquiry', eid=e.id) }}"
+                  style="display:inline" onsubmit="return confirm('Delete this enquiry permanently?')">
+                <button class="act-btn act-danger" type="submit">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </form>
+        </div>
+
+        <!-- Reply Box -->
+        <div class="reply-box" id="reply-enq-{{ e.id }}">
+            <form method="POST" action="{{ url_for('admin_reply_enquiry', eid=e.id) }}">
+                <label style="font-size:.8rem;font-weight:700;color:var(--primary);margin-bottom:.4rem;display:block">
+                    <i class="fas fa-reply" style="color:var(--teal)"></i>
+                    Reply to {{ e.name }} ({{ e.email }})
+                    {% if e.country %} — Study in {{ e.country }}{% endif %}
+                </label>
+                <textarea name="reply_text"
+                    placeholder="Type your reply about studying in {{ e.country or 'their chosen destination' }}..."></textarea>
+                <div class="reply-box-acts">
+                    <button type="submit" class="act-btn act-success">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                    <button type="button" class="act-btn act-info" onclick="toggleReply('enq-{{ e.id }}')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <div class="empty-state">
+            <i class="fas fa-globe"></i>
+            <p>No overseas enquiries yet. They appear when users submit the Study Abroad enquiry form.</p>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Handles both numeric IDs (messages) and string IDs like 'enq-5' (enquiries)
+function toggleReply(id) {
+    const box = document.getElementById('reply-' + id);
+    if (box) box.classList.toggle('open');
+}
+</script>
+{% endblock %}

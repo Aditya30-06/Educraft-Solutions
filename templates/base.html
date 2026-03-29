@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EduCraft Solutions{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('home') }}" class="nav-logo" style="display: flex; align-items: center;">
+            <img src="{{ url_for('static', filename='img/logo_blue_theme.png') }}" alt="EduCraft Solutions" style="height: 48px; object-fit: contain;">
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+            <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+            <li><a href="{{ url_for('services') }}" class="nav-link {% if request.endpoint == 'services' %}active{% endif %}">Services</a></li>
+
+
+            <li><a href="{{ url_for('contact') }}" class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            {% if session.get('user_id') %}
+                <div class="user-menu">
+                    {% if session.get('role') == 'admin' %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-sm" style="color:var(--orange);border-color:var(--orange)">
+                            <i class="fas fa-shield-alt"></i> Admin Panel
+                        </a>
+                    {% elif session.get('role') == 'guest' %}
+                        <span class="user-name"><i class="fas fa-user-secret"></i> Guest</span>
+                    {% else %}
+                        <a href="{{ url_for('member_dashboard') if session.get('role') == 'member' else url_for('client_dashboard') }}" class="btn btn-outline-sm" style="margin-right: 10px;">
+                            <i class="fas fa-columns"></i> Dashboard
+                        </a>
+                        <span class="user-name"><i class="fas fa-user-circle"></i> {{ session.get('name', 'User') }}</span>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-sm">Logout</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-outline-sm">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn btn-primary-sm">Get Started</a>
+            {% endif %}
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ===== FLASH MESSAGES ===== -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+            {{ message }}
+            <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ===== PAGE CONTENT ===== -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="footer-top">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="{{ url_for('home') }}" class="footer-logo" style="display: block; margin-bottom: 1rem; text-decoration: none;">
+                    <img src="{{ url_for('static', filename='img/logo_blue_theme.png') }}" alt="EduCraft Solutions" style="height: 48px; object-fit: contain;">
+                </a>
+                <p>Your trusted partner for academic excellence and global education journeys. Empowering students since 2018.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About Us</a></li>
+                    <li><a href="{{ url_for('services') }}">Our Services</a></li>
+
+                    <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                </ul>
+            </div>
+
+
+
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>1/191, Ground Floor, Subhash Nagar, New Delhi – 110027</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+919821693299">+91 9821693299</a>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:pshiksha4.0@gmail.com">pshiksha4.0@gmail.com</a>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Mon – Sat: 9 AM – 7 PM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2024 EduCraft Solutions. All rights reserved. | Powered by Apex Abroad Overseas</p>
+        <div class="footer-bottom-links">
+            <a href="{{ url_for('privacy_policy') }}" target="_blank">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ===== CHATBOT ===== -->
+<div class="chatbot-wrapper">
+    <div class="chatbot-box" id="chatbotBox">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div>
+                    <strong>Assistant</strong>
+                    <span class="chatbot-status"><span class="dot"></span> Online</span>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose" aria-label="Close chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chat-msg bot">
+                <div class="chat-bubble">👋 Hello! Welcome to <b>EduCraft Solutions</b>.<br>I'm your research assistant. Choose a topic below to get started — no typing needed!</div>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatInput" placeholder="Type your message..." autocomplete="off">
+            <button id="chatSend" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+    <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat">
+        <i class="fas fa-comment-dots" id="chatIcon"></i>
+        <i class="fas fa-times" id="chatIconClose" style="display:none"></i>
+        <span class="chat-badge" id="chatBadge">1</span>
+    </button>
+</div>
+
+<!-- ===== MARKETING POPUP ===== -->
+<div id="promoModal" class="marketing-modal">
+    <div class="marketing-modal-content">
+        <button class="marketing-close" id="promoClose" aria-label="Close">&times;</button>
+        <div class="marketing-body">
+            <h3 style="color:var(--primary); margin-bottom:10px;">Accelerate Your Education!</h3>
+            <p style="color:var(--text); font-size:1.05rem; margin-bottom:20px;">
+                Get a <strong>free</strong> personalized university strategy report today. Don't miss out on securing your admission!
+            </p>
+            <a href="{{ url_for('contact') }}" class="btn btn-primary btn-full" style="padding: 12px; display:inline-block; text-decoration:none;">Claim Free Report</a>
+        </div>
+    </div>
+</div>
+<style>
+.marketing-modal {
+    position: fixed; bottom: 20px; right: 20px; width: auto; height: auto;
+    background: transparent; display: flex; align-items: flex-end; justify-content: flex-end;
+    z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.4s ease;
+    backdrop-filter: none; pointer-events: none;
+}
+.marketing-modal.show { opacity: 1; visibility: visible; }
+.marketing-modal-content {
+    background: #fff; padding: 25px; border-radius: 12px; max-width: 350px; width: 100%;
+    position: relative; transform: translateX(50px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: left; pointer-events: auto;
+    border-left: 4px solid var(--primary);
+}
+.marketing-modal.show .marketing-modal-content { transform: translateX(0); }
+.marketing-close {
+    position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.8rem;
+    cursor: pointer; color: var(--text-muted); padding: 0; line-height: 1;
+}
+.marketing-close:hover { color: var(--danger); }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("promoModal");
+    
+    function showPromo() {
+        modal.classList.add("show");
+        
+        // Stay for 30 seconds, then hide
+        setTimeout(function() {
+            if (modal.classList.contains("show")) {
+                modal.classList.remove("show");
+            }
+        }, 30000);
+    }
+
+    // Show initially on page load/refresh (after 1 second)
+    setTimeout(showPromo, 1000);
+
+    // Show again every 2 minutes (120,000 ms)
+    setInterval(showPromo, 120000);
+
+    document.getElementById("promoClose").addEventListener("click", function() {
+        modal.classList.remove("show");
+    });
+});
+</script>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

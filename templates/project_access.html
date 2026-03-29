@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}One-Time Project Access{% endblock %}
+{% block content %}
+<section class="page-hero" style="padding-top:140px; padding-bottom:60px; background:linear-gradient(135deg, #1a3c6e, #0f2548); color:#fff; text-align:center;">
+    <div class="container">
+        <h1 style="color:#fff;"><i class="fas fa-gem" style="color: var(--orange);"></i> Exclusive Project Content</h1>
+        <p style="opacity:0.8; font-size:1.1rem; margin-top:10px;">You are viewing this sensitive content. Access has now been consumed and will expire once you leave this page.</p>
+    </div>
+</section>
+
+<section class="section" style="min-height: 50vh;">
+    <div class="container">
+        <div class="card" style="padding:40px; border-radius:12px; border:1px solid var(--border); background:#fff;">
+            <h3><i class="fas fa-file-alt" style="color:var(--teal);"></i> Confidential Strategy Document</h3>
+            <p style="margin-top:15px; font-size:1.05rem; line-height:1.7; color:var(--text);">
+                Welcome to the exclusive onboarding flow for requested members. Here are the top secret materials that you requested access for.
+                <br><br>
+                1. <strong>Phase 1:</strong> Pre-departure orientations and visa assistance protocol.<br>
+                2. <strong>Phase 2:</strong> Guaranteed scholarship matrices and evaluation frameworks.<br>
+                3. <strong>Phase 3:</strong> Final university placement insights.<br>
+                <br>
+                <em>Ensure you save any information you need right now, as you will not be able to return to this screen once you navigate away.</em>
+            </p>
+            
+            <a href="{{ url_for('member_dashboard') }}" class="btn btn-outline" style="margin-top: 30px;"><i class="fas fa-arrow-left"></i> Return to Dashboard</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

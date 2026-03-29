@@ -1,0 +1,131 @@
+{% extends "pms/base.html" %}
+{% block content %}
+
+<div class="dashboard-wrapper">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Project Dashboard</h1>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin-top:4px;">
+                Welcome back, <strong style="color:var(--primary)">{{ current_user.name }}</strong>
+                {% if session.get('role') == "client" %} {% endif %}
+                &nbsp;·&nbsp; {{ total }} project{{ 's' if total != 1 else '' }} total
+            </p>
+        </div>
+        {% if session.get('role') == "admin" %}
+        <a href="{{ url_for('pms_add_project') }}" class="add-btn">+ New Project</a>
+        {% endif %}
+    </div>
+
+    <!-- STATS GRID -->
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <span class="stat-icon">📁</span>
+            <h2>{{ total }}</h2>
+            <p>Total</p>
+        </div>
+        <div class="stat-card InProgressCard">
+            <span class="stat-icon">⚡</span>
+            <h2>{{ in_progress }}</h2>
+            <p>In Progress</p>
+        </div>
+        <div class="stat-card CompletedCard">
+            <span class="stat-icon">✅</span>
+            <h2>{{ completed }}</h2>
+            <p>Completed</p>
+        </div>
+        <div class="stat-card HoldCard">
+            <span class="stat-icon">⏸</span>
+            <h2>{{ on_hold }}</h2>
+            <p>On Hold</p>
+        </div>
+        <div class="stat-card PendingCard">
+            <span class="stat-icon">🕐</span>
+            <h2>{{ pending }}</h2>
+            <p>Pending</p>
+        </div>
+    </div>
+
+    <!-- PROJECTS TABLE -->
+    <div class="table-card">
+        <div class="table-card-header">
+            <h2>{{ "My Projects" if session.get('role') == "client" else "All Projects" }}</h2>
+            <span class="project-count">{{ total }} projects</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    {% if session.get('role') == "admin" %}
+                    <th>Client</th>
+                    {% endif %}
+                    <th>Status</th>
+                    <th>Progress</th>
+                    <th>Deadline</th>
+                    {% if session.get('role') == "admin" %}
+                    <th>Action</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in projects %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('pms_project_detail', id=p.id) }}" class="project-name-link">
+                            {{ p.name }}
+                        </a>
+                    </td>
+
+                    {% if session.get('role') == "admin" %}
+                    <td>{{ p.client_name }}</td>
+                    {% endif %}
+
+                    <td>
+                        <span class="badge {{ p.status|replace(' ','') }}">
+                            {{ p.status }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill"
+                                    data-progress="{{ p.progress }}">
+                                </div>
+                            </div>
+                            <span class="progress-text">
+                                {{ p.progress }}%
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>{{ p.deadline }}</td>
+
+                    {% if session.get('role') == "admin" %}
+                    <td>
+                        <form action="{{ url_for('pms_delete_project', id=p.id) }}" method="POST"
+                                onsubmit="return confirm('Delete this project?');">
+                            <button type="submit" class="delete-btn">
+                                🗑 Delete
+                            </button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align:center;color:var(--text-muted);padding:40px;">
+                        No projects found.
+                        {% if session.get('role') == "admin" %}
+                        <a href="{{ url_for('pms_add_project') }}" style="color:var(--primary);font-weight:600;">Add the first one →</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

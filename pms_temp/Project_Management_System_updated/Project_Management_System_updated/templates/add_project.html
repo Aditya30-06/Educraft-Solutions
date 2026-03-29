@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="form-wrapper">
+    <div class="form-page-header">
+        <h1>Add New Project</h1>
+        <p>Fill in the details below to create a new project entry.</p>
+    </div>
+
+    <div class="form-card">
+        <form method="POST" class="project-form">
+
+            <!-- PROJECT INFO -->
+            <div class="form-section-title">📋 Project Information</div>
+
+            <label>Project Name</label>
+            <input name="name" placeholder="e.g. E-Commerce Platform" required>
+
+            <label>Description</label>
+            <textarea name="description" placeholder="Briefly describe the project scope and goals…"
+                required></textarea>
+
+            <!-- CLIENT DETAILS -->
+            <div class="form-section-divider"></div>
+            <div class="form-section-title">👤 Client Details</div>
+
+            <div class="form-row">
+                <div>
+                    <label>Select Client</label>
+                    <select name="client_id" required>
+                        <option value="">Choose Client</option>
+                        {% for client in clients %}
+                            <option value="{{ client.id }}">
+                                {{ client.username }} ({{ client.email }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label>Client Phone</label>
+                    <input name="client_phone" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+            </div>
+
+            <!-- STATUS & TIMELINE -->
+            <div class="form-section-divider"></div>
+            <div class="form-section-title">📅 Status & Timeline</div>
+
+            <div class="form-row">
+                <div>
+                    <label>Status</label>
+                    <select name="status" required>
+                        <option value="">Select status</option>
+                        <option value="In Progress">⚡ In Progress</option>
+                        <option value="Completed">✅ Completed</option>
+                        <option value="On Hold">⏸ On Hold</option>
+                        <option value="Pending">🕐 Pending</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Progress (%)</label>
+                    <input type="number"
+                        name="progress"
+                        min="0"
+                        max="100"
+                        placeholder="Enter initial progress"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label>Start Date</label>
+                    <input type="date" name="start_date" required>
+                </div>
+                <div>
+                    <label>Deadline</label>
+                    <input type="date" name="deadline" required>
+                </div>
+            </div>
+
+            <!-- TECH & MILESTONES -->
+            <div class="form-section-divider"></div>
+            <div class="form-section-title">🛠 Tech & Milestones</div>
+
+            <label>Tech Stack</label>
+            <input name="tech_stack" placeholder="e.g. React, Node.js, PostgreSQL, Docker" required>
+
+            <label>Milestones (Timeline Steps)</label>
+            <textarea name="milestones"
+                placeholder="Comma-separated milestones&#10;e.g. UI Design, API Complete, Testing, Deployment"
+                required></textarea>
+
+            <button type="submit" class="big-btn">🚀 Create Project</button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

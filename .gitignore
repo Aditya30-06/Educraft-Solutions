@@ -1,0 +1,21 @@
+# Secrets — NEVER commit these
+.env
+gsheet_credentials.json
+
+# Database & generated data
+instance/
+data/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store

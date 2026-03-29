@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-hero">
+
+    <!-- Floating decorative shapes -->
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+
+    <!-- HERO SECTION -->
+    <div class="hero-content">
+        <div class="hero-badge">✨ Built for Modern Teams</div>
+
+        <h1 class="hero-title">
+            Managing Projects<br>
+            Has Never Been <span class="hero-highlight">This Easy</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            ProjectHub gives you a crystal-clear view of every project — from kick-off
+            to delivery. Track progress, manage clients, and collaborate with your team,
+            all from one beautiful dashboard.
+        </p>
+
+        <div class="hero-cta">
+            {% if current_user.is_authenticated %}
+            <a href="/dashboard" class="cta-btn cta-primary">Go to Dashboard →</a>
+            {% else %}
+            <a href="/login" class="cta-btn cta-primary">Get Started Free →</a>
+            <a href="/register" class="cta-btn cta-secondary">Create Account</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- FEATURE CARDS -->
+    <div class="features-grid">
+
+        <div class="feature-card" style="animation-delay: 0.1s">
+            <div class="feature-icon">🚀</div>
+            <h3>Launch in Seconds</h3>
+            <p>Add a new project in under a minute. Just fill in the details and you're live — no complicated setup
+                required.</p>
+        </div>
+
+        <div class="feature-card" style="animation-delay: 0.2s">
+            <div class="feature-icon">📊</div>
+            <h3>Real-Time Progress</h3>
+            <p>Visual progress bars and a live dashboard show exactly where every project stands at a glance.</p>
+        </div>
+
+        <div class="feature-card" style="animation-delay: 0.3s">
+            <div class="feature-icon">👥</div>
+            <h3>Client & Admin Roles</h3>
+            <p>Separate experiences for admins who manage projects and clients who track their deliverables — all in one
+                place.</p>
+        </div>
+
+        <div class="feature-card" style="animation-delay: 0.4s">
+            <div class="feature-icon">🤖</div>
+            <h3>Built-in Assistant</h3>
+            <p>Clients can ask the chatbot about deadlines, progress, and status — instant answers, no waiting.</p>
+        </div>
+
+        <div class="feature-card" style="animation-delay: 0.5s">
+            <div class="feature-icon">🔒</div>
+            <h3>Secure by Default</h3>
+            <p>Each user sees only what they should. Role-based access keeps your data safe and organized.</p>
+        </div>
+
+        <div class="feature-card" style="animation-delay: 0.6s">
+            <div class="feature-icon">🌙</div>
+            <h3>Dark & Light Mode</h3>
+            <p>Switch between dark and light themes with one click. Your preference is remembered across sessions.</p>
+        </div>
+
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="home-stats-strip">
+        <div class="home-stat">
+            <strong>∞</strong>
+            <span>Projects</span>
+        </div>
+        <div class="home-stat-divider"></div>
+        <div class="home-stat">
+            <strong>2</strong>
+            <span>User Roles</span>
+        </div>
+        <div class="home-stat-divider"></div>
+        <div class="home-stat">
+            <strong>100%</strong>
+            <span>Free to Use</span>
+        </div>
+        <div class="home-stat-divider"></div>
+        <div class="home-stat">
+            <strong>⚡</strong>
+            <span>Lightning Fast</span>
+        </div>
+    </div>
+
+    <!-- CTA BANNER -->
+    <div class="home-cta-banner">
+        <div class="cta-banner-text">
+            <h2>Ready to take control of your projects?</h2>
+            <p>Join ProjectHub today — it takes less than a minute to get started.</p>
+        </div>
+        <div>
+            {% if current_user.is_authenticated %}
+            <a href="/dashboard" class="cta-btn cta-primary">Open Dashboard →</a>
+            {% else %}
+            <a href="/register" class="cta-btn cta-primary">Start for Free →</a>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

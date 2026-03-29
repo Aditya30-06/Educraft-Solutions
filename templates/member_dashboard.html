@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Member Dashboard{% endblock %}
+{% block content %}
+<section class="section" style="padding-top:120px; min-height: 60vh;">
+    <div class="container">
+        <h2 style="margin-bottom:20px;">Welcome, {{ current_user.name }}</h2>
+        <div class="card" style="padding:40px; border-radius:12px; border:1px solid var(--border); background:#fff;">
+            <h3>Your Membership Status: 
+                {% if current_user.status == 'Pending' or current_user.status == 'Requested' %}
+                <span class="badge" style="font-size: 1rem; margin-left:10px; padding: 5px 15px; background: var(--warning); color: #fff;">
+                {% elif current_user.status == 'Approved' %}
+                <span class="badge" style="font-size: 1rem; margin-left:10px; padding: 5px 15px; background: var(--success); color: #fff;">
+                {% else %}
+                <span class="badge" style="font-size: 1rem; margin-left:10px; padding: 5px 15px; background: var(--danger); color: #fff;">
+                {% endif %}
+                    {{ current_user.status }}
+                </span>
+            </h3>
+            
+            <div style="margin-top:25px; font-size: 1.1rem; line-height: 1.6;">
+                {% if current_user.status == 'Pending' %}
+                <p style="color:var(--text-muted);">Please request approval from the Admin to gain access to the one-time project content.</p>
+                <form method="POST" action="{{ url_for('request_approval') }}" style="margin-top:20px;">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Request Approval</button>
+                </form>
+
+                {% elif current_user.status == 'Requested' %}
+                <p style="color:var(--text-muted);">
+                    <i class="fas fa-hourglass-half" style="color: var(--warning);"></i> 
+                    Your request has been sent to the Admin. Please wait for approval. We will notify you once it's reviewed.
+                </p>
+
+                {% elif current_user.status == 'Approved' %}
+                <div style="background: rgba(39, 174, 96, 0.1); border-left: 4px solid var(--success); padding: 15px 20px; border-radius: 8px;">
+                    <p style="color:var(--text); margin-bottom: 0;">Your request has been approved! You have <strong>One-Time</strong> access to the project link below.</p>
+                </div>
+                <div style="margin-top:25px;">
+                    <a href="{{ url_for('project_access') }}" class="btn btn-primary" onclick="return confirm('WARNING: This link can only be clicked ONCE. After visiting the page, your access will expire immediately. Do you wish to proceed?')">
+                        <i class="fas fa-unlock-alt"></i> Access Project Now
+                    </a>
+                </div>
+
+                {% elif current_user.status == 'Rejected' %}
+                <p style="color:var(--danger);"><i class="fas fa-times-circle"></i> Unfortunately, your request for access was rejected. Please contact support for more details.</p>
+
+                {% elif current_user.status == 'Expired' %}
+                <div style="background: rgba(231, 76, 60, 0.1); border-left: 4px solid var(--danger); padding: 15px 20px; border-radius: 8px;">
+                    <p style="color:var(--text); margin-bottom: 0;">
+                        <i class="fas fa-ban" style="color: var(--danger);"></i> 
+                        Your one-time project access has successfully been used and is now <strong>Expired</strong>.
+                    </p>
+                </div>
+                
+                <div style="margin-top:25px; background: #f8f9fa; padding: 25px; border-radius: 8px; border: 1px dashed var(--teal); text-align: center;">
+                    <h4 style="color:var(--primary); margin-bottom: 10px;">Ready for Full Access?</h4>
+                    <p style="color:var(--text-muted); font-size: 0.95rem; margin-bottom: 15px;">
+                        Upgrade to a Premium Client to unlock unlimited 1:1 strategy sessions, a dedicated visa officer, and lifetime support.
+                    </p>
+                    <a href="{{ url_for('purchase_project') }}" class="btn btn-primary" style="padding: 10px 20px; font-size: 1rem;">
+                        <i class="fas fa-crown"></i> Upgrade to Premium Client
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

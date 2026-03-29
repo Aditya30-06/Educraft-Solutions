@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Login – EduCraft Solutions{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-bg">
+        <div class="auth-shape as1"></div>
+        <div class="auth-shape as2"></div>
+    </div>
+    <div class="auth-container">
+        <div class="auth-visual">
+            <div class="auth-visual-content">
+                <i class="fas fa-graduation-cap auth-visual-icon"></i>
+                <h2>Welcome Back!</h2>
+                <p>Log in to continue your education journey with EduCraft Solutions.</p>
+                <div class="auth-features">
+                    <div class="af-item"><i class="fas fa-check-circle"></i> Track your applications</div>
+                    <div class="af-item"><i class="fas fa-check-circle"></i> Access exclusive resources</div>
+                    <div class="af-item"><i class="fas fa-check-circle"></i> Chat with counselors</div>
+                    <div class="af-item"><i class="fas fa-check-circle"></i> Scholarship updates</div>
+                </div>
+            </div>
+        </div>
+        <div class="auth-form-wrap">
+            <div class="auth-form-header">
+                <a href="{{ url_for('home') }}" class="auth-logo" style="display: block; margin-bottom: 1.5rem;">
+                    <img src="{{ url_for('static', filename='img/logo_blue_theme.png') }}" alt="EduCraft" style="height: 40px; object-fit: contain;">
+                </a>
+                <h2>Sign In</h2>
+                <p>Don't have an account? <a href="{{ url_for('signup') }}">Create one</a></p>
+            </div>
+
+            <!-- Login type tabs -->
+            <div class="login-tabs">
+                <button class="ltab {% if tab != 'admin' %}active{% endif %}" onclick="switchTab('client')">
+                    <i class="fas fa-user"></i> Client Login
+                </button>
+                <button class="ltab {% if tab == 'admin' %}active{% endif %}" onclick="switchTab('admin')">
+                    <i class="fas fa-shield-alt"></i> Admin Login
+                </button>
+            </div>
+
+            <!-- CLIENT LOGIN -->
+            <div id="clientForm" {% if tab == 'admin' %}style="display:none"{% endif %}>
+                <form class="auth-form" method="POST" action="{{ url_for('login') }}">
+                    <input type="hidden" name="login_type" value="client">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">
+                            Password
+                            <a href="#" class="forgot-link" onclick="alert('Please contact pshiksha4.0@gmail.com to reset your password.');return false;">Forgot password?</a>
+                        </label>
+                        <div class="input-wrap">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                            <button type="button" class="toggle-pw" onclick="togglePassword('password')">
+                                <i class="fas fa-eye" id="eyeIcon-password"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me for 30 days</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    <div class="auth-divider"><span>or continue with</span></div>
+                    <a href="{{ url_for('google_login') }}" class="btn-social btn-google-full">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20">
+                        Continue with Google
+                    </a>
+                    <a href="{{ url_for('guest_mode') }}" class="btn-social btn-guest-full" style="margin-top: 10px; border: 1.5px solid var(--border); background: #fff; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); text-decoration: none;">
+                        <i class="fas fa-user-secret" style="margin-right: 8px;"></i> Continue as a Guest
+                    </a>
+                </form>
+            </div>
+
+            <!-- ADMIN LOGIN -->
+            <div id="adminForm" {% if tab != 'admin' %}style="display:none"{% endif %}>
+                <div class="admin-login-banner">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Admin Access — Restricted Area</span>
+                </div>
+                <form class="auth-form" method="POST" action="{{ url_for('login') }}">
+                    <input type="hidden" name="login_type" value="admin">
+                    <div class="form-group">
+                        <label for="admin_email">Admin Email</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="admin_email" name="email" placeholder="admin@educraft.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin_password">Admin Password</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="admin_password" name="password" placeholder="Admin password" required>
+                            <button type="button" class="toggle-pw" onclick="togglePassword('admin_password')">
+                                <i class="fas fa-eye" id="eyeIcon-admin_password"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-admin btn-full">
+                        <i class="fas fa-tachometer-alt"></i> Access Admin Panel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.login-tabs { display:flex; gap:0; margin-bottom:1.5rem; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
+.ltab { flex:1; padding:0.65rem 1rem; background:#fff; border:none; cursor:pointer; font-size:0.88rem; font-weight:600; color:var(--text-muted); transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:0.4rem; font-family:inherit; }
+.ltab.active { background:var(--primary); color:#fff; }
+.btn-google-full { display:flex; align-items:center; justify-content:center; gap:0.75rem; width:100%; border:1.5px solid var(--border); background:#fff; border-radius:10px; padding:0.75rem 1rem; font-size:0.9rem; font-weight:600; cursor:pointer; transition:all 0.2s; color:var(--text); text-decoration:none; }
+.btn-google-full:hover { border-color:#4285f4; box-shadow:0 2px 12px rgba(66,133,244,0.15); background:#f8fbff; }
+.admin-login-banner { display:flex; align-items:center; gap:0.75rem; background:rgba(26,60,110,0.06); border:1px solid rgba(26,60,110,0.15); border-radius:10px; padding:0.85rem 1.1rem; margin-bottom:1.25rem; color:var(--primary); font-size:0.88rem; font-weight:600; }
+.btn-admin { background:linear-gradient(135deg,#1a3c6e,#0f2548); color:#fff; border:none; }
+.btn-admin:hover { background:linear-gradient(135deg,#0f2548,#1a3c6e); transform:translateY(-2px); box-shadow:0 8px 24px rgba(26,60,110,0.3); }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    const icon  = document.getElementById('eyeIcon-' + id);
+    input.type  = input.type === 'password' ? 'text' : 'password';
+    icon.className = input.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+}
+function switchTab(tab) {
+    const client = document.getElementById('clientForm');
+    const admin  = document.getElementById('adminForm');
+    const tabs   = document.querySelectorAll('.ltab');
+    if (tab === 'admin') {
+        client.style.display = 'none'; admin.style.display = 'block';
+        tabs[0].classList.remove('active'); tabs[1].classList.add('active');
+    } else {
+        admin.style.display  = 'none'; client.style.display = 'block';
+        tabs[1].classList.remove('active'); tabs[0].classList.add('active');
+    }
+}
+</script>
+{% endblock %}

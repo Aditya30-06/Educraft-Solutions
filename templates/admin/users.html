@@ -1,0 +1,102 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Users – Admin{% endblock %}
+{% block page_title %}Registered Users{% endblock %}
+
+{% block content %}
+
+<!-- Google Sheets Banner -->
+<div class="sheets-banner" style="margin-bottom:1.25rem">
+    <div class="sheets-banner-text">
+        <div class="sheets-logo"><i class="fas fa-users"></i></div>
+        <div>
+            <strong>👤 Registered Users — Live in Google Sheets</strong>
+            <span>New signups auto-sync to Sheet 3. All 3 sheets update in real-time.</span>
+        </div>
+    </div>
+    <div class="sheets-actions">
+        {% if gsheet_configured %}
+        <form method="POST" action="{{ url_for('admin_sync_sheets') }}" style="display:inline">
+            <button type="submit" class="btn-sync-sheet"><i class="fas fa-sync-alt"></i> Sync</button>
+        </form>
+        {% endif %}
+        <a href="{{ google_sheet_url }}" target="_blank" class="btn-open-sheet">
+            <i class="fas fa-table"></i> Click to See Live Data
+        </a>
+    </div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+    <h3 style="color:var(--primary);font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+        <i class="fas fa-users" style="color:var(--primary)"></i>
+        All Client Users
+        <span class="badge b-teal">{{ users|length }}</span>
+    </h3>
+</div>
+
+{% if users %}
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
+                    <th>Interest</th><th>Sign-up Via</th><th>Verified</th><th>Joined</th><th>Status</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for u in users %}
+            <tr {% if u.status == 'Requested' %}style="background: rgba(243, 156, 18, 0.08); border-left: 4px solid var(--warning);"{% endif %}>
+                <td style="color:var(--muted);font-size:.76rem">{{ u.id }}</td>
+                <td><strong>{{ u.name }}</strong></td>
+                <td><a href="mailto:{{ u.email }}" style="color:var(--teal);font-size:.8rem">{{ u.email }}</a></td>
+                <td style="color:var(--muted);font-size:.8rem">{{ u.phone or '—' }}</td>
+                <td>{% if u.interest %}<span class="badge b-teal" style="font-size:.65rem">{{ u.interest }}</span>{% else %}—{% endif %}</td>
+                <td>
+                    {% if u.provider == 'google' %}
+                    <span class="badge b-orange"><i class="fab fa-google" style="margin-right:.2rem"></i>Google</span>
+                    {% else %}
+                    <span class="badge b-muted">Email</span>{% endif %}
+                </td>
+                <td>
+                    {% if u.is_verified %}<span class="badge b-green"><i class="fas fa-check"></i> Yes</span>
+                    {% else %}<span class="badge b-red">No</span>{% endif %}
+                </td>
+                <td style="color:var(--muted);font-size:.76rem;white-space:nowrap">{{ u.created_at.strftime('%d %b %Y') }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin_update_user_status', uid=u.id) }}" style="display:flex; gap:0.25rem;">
+                        <input type="hidden" name="status" id="status_{{ u.id }}">
+                        <select class="form-select" style="padding:2px 5px; font-size:.75rem; border-radius:4px" onchange="document.getElementById('status_{{ u.id }}').value=this.value; this.form.submit()">
+                            <option value="Pending" {% if u.status == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Requested" {% if u.status == 'Requested' %}selected{% endif %}>Requested</option>
+                            <option value="Approved" {% if u.status == 'Approved' %}selected{% endif %}>Approved</option>
+                            <option value="Rejected" {% if u.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                            <option value="Expired" {% if u.status == 'Expired' %}selected{% endif %}>Expired</option>
+                        </select>
+                    </form>
+                </td>
+                <td>
+                    <div style="display:flex;gap:.35rem">
+                        <a href="mailto:{{ u.email }}" class="act-btn act-info" title="Email user"><i class="fas fa-envelope"></i></a>
+                        <form method="POST" action="{{ url_for('admin_delete_user', uid=u.id) }}"
+                              style="display:inline"
+                              onsubmit="return confirm('Delete {{ u.name }}? This cannot be undone.')">
+                            <button class="act-btn act-danger" type="submit" title="Delete"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="fas fa-user-slash"></i>
+        <p>No users registered yet. They appear here after signing up on the website.</p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

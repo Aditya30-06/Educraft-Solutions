@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Client Dashboard{% endblock %}
+{% block content %}
+<section class="section" style="padding-top:120px; min-height: 60vh;">
+    <div class="container">
+        <h2 style="margin-bottom:20px;">Welcome, {{ current_user.name }} (<span style="color:var(--primary);">Client</span>)</h2>
+        
+        <div class="card" style="padding:40px; border-radius:12px; border:1px solid var(--border); background:#fff; margin-bottom: 2rem;">
+            <h3><i class="fas fa-crown" style="color:var(--orange);"></i> Premium Client Access</h3>
+            <p style="margin-top:15px; font-size:1.05rem; line-height:1.7; color:var(--text);">
+                As a premium client, you now have full access to our dedicated consulting team and resources.
+                <br>
+                Thank you for your purchase! Our team will reach out to you within 24 hours to schedule your strategy session.
+            </p>
+            <a href="{{ url_for('contact') }}" class="btn btn-primary" style="margin-top:20px;">Contact Support</a>
+        </div>
+
+        <div class="card" style="padding:40px; border-radius:12px; border:1px solid var(--border); background: linear-gradient(135deg,#1a3c6e 0%, #0097a7 100%); margin-bottom: 2rem;">
+            <h3 style="color:#fff;"><i class="fas fa-project-diagram" style="color:#ffd54f;"></i> Project Management Dashboard</h3>
+            <p style="margin-top:12px; font-size:1rem; line-height:1.7; color:rgba(255,255,255,0.85);">
+                Track your projects, milestones, deadlines and progress in real-time.
+            </p>
+            <a href="{{ url_for('pms_dashboard') }}" class="btn" style="margin-top:20px; background:#ffd54f; color:#1a3c6e; font-weight:700; border:none;">
+                <i class="fas fa-tachometer-alt"></i>&nbsp; Go to Project Dashboard
+            </a>
+        </div>
+
+
+        <div class="card" style="padding:40px; border-radius:12px; border:1px solid var(--border); background:#fff;">
+            <h3><i class="fas fa-receipt"></i> Purchase History</h3>
+            {% if purchases %}
+            <div class="table-wrap" style="margin-top: 20px;">
+                <table style="width:100%; border-collapse:collapse; text-align:left;">
+                    <thead>
+                        <tr style="background:var(--bg-light); border-bottom:2px solid var(--border);">
+                            <th style="padding:12px;">Item</th>
+                            <th style="padding:12px;">Amount</th>
+                            <th style="padding:12px;">Status</th>
+                            <th style="padding:12px;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in purchases %}
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:12px;"><strong>{{ p.item_name }}</strong></td>
+                            <td style="padding:12px;">${{ p.amount }}</td>
+                            <td style="padding:12px;"><span class="badge b-green">{{ p.status }}</span></td>
+                            <td style="padding:12px; color:var(--text-muted); font-size:0.9rem;">{{ p.purchased_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p style="margin-top: 15px; color:var(--text-muted);">No purchases found.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

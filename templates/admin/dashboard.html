@@ -1,0 +1,135 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard – Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Stats -->
+<div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card">
+        <div class="stat-icon si-blue"><i class="fas fa-users"></i></div>
+        <div><div class="stat-num">{{ total_users }}</div><div class="stat-label">Registered Users</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon si-teal"><i class="fas fa-envelope"></i></div>
+        <div><div class="stat-num">{{ total_messages }}</div><div class="stat-label">Contact Messages</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon si-red"><i class="fas fa-bell"></i></div>
+        <div><div class="stat-num">{{ unread_msgs }}</div><div class="stat-label">Unread Messages</div></div>
+    </div>
+</div>
+
+<!-- Google Sheets Live Data Banner -->
+<div class="sheets-banner">
+    <div class="sheets-banner-text">
+        <div class="sheets-logo"><i class="fas fa-table"></i></div>
+        <div>
+            <strong>📊 Live Data — Google Sheets</strong>
+            <span>
+                {% if gsheet_configured %}
+                    All 3 data sheets auto-sync in real-time whenever a form is submitted.
+                {% else %}
+                    Set up Google Sheets to see all your data update automatically in real-time.
+                    See README for setup instructions.
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    <div class="sheets-actions">
+        {% if gsheet_configured %}
+        <form method="POST" action="{{ url_for('admin_sync_sheets') }}" style="display:inline">
+            <button type="submit" class="btn-sync-sheet">
+                <i class="fas fa-sync-alt"></i> Sync Now
+            </button>
+        </form>
+        {% endif %}
+        <a href="{{ google_sheet_url }}" target="_blank" class="btn-open-sheet">
+            <i class="fas fa-table"></i>
+            {% if gsheet_configured %}Click to See Live Data{% else %}Open Google Sheet{% endif %}
+        </a>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="two-col">
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-envelope" style="color:var(--teal);margin-right:.4rem"></i> Recent Messages</h3>
+            <a href="{{ url_for('admin_messages') }}" class="tb-btn">View All</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Date</th><th>Status</th></tr></thead>
+                <tbody>
+                {% if recent_msgs %}
+                    {% for m in recent_msgs %}
+                    <tr>
+                        <td><strong>{{ m.name }}</strong></td>
+                        <td style="color:var(--muted);font-size:.78rem">{{ m.email }}</td>
+                        <td>{% if m.service %}<span class="badge b-teal">{{ m.service }}</span>{% else %}—{% endif %}</td>
+                        <td style="color:var(--muted);font-size:.77rem">{{ m.submitted_at.strftime('%d %b %Y') }}</td>
+                        <td>
+                            {% if m.is_read %}<span class="badge b-muted">Read</span>
+                            {% else %}<span class="badge b-red">New</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="5"><div class="empty-state"><i class="fas fa-inbox"></i><p>No messages yet</p></div></td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-users" style="color:var(--primary);margin-right:.4rem"></i> Recent Registrations</h3>
+            <a href="{{ url_for('admin_users') }}" class="tb-btn">View All</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Provider</th><th>Joined</th></tr></thead>
+                <tbody>
+                {% if recent_users %}
+                    {% for u in recent_users %}
+                    <tr>
+                        <td><strong>{{ u.name }}</strong></td>
+                        <td style="color:var(--muted);font-size:.78rem">{{ u.email }}</td>
+                        <td>
+                            {% if u.provider == 'google' %}<span class="badge b-orange">Google</span>
+                            {% else %}<span class="badge b-teal">Email</span>{% endif %}
+                        </td>
+                        <td style="color:var(--muted);font-size:.77rem">{{ u.created_at.strftime('%d %b %Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="4"><div class="empty-state"><i class="fas fa-user-slash"></i><p>No users yet</p></div></td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card">
+    <div class="card-header"><h3>Quick Actions</h3></div>
+    <div class="card-body" style="display:flex;gap:.9rem;flex-wrap:wrap">
+        <a href="{{ url_for('admin_messages') }}" class="tb-btn" style="border-color:var(--teal);color:var(--teal)">
+            <i class="fas fa-envelope"></i> View All Messages
+        </a>
+        <a href="{{ url_for('admin_users') }}" class="tb-btn">
+            <i class="fas fa-users"></i> Manage Users
+        </a>
+        <a href="{{ url_for('pms_dashboard') }}" class="tb-btn" style="background:#1a3c6e;border-color:#1a3c6e;color:#fff">
+            <i class="fas fa-project-diagram"></i> Project Management
+        </a>
+        <a href="{{ google_sheet_url }}" target="_blank" class="tb-btn sheets" style="background:#34a853;border-color:#34a853;color:#fff">
+            <i class="fas fa-table"></i> Click to See Live Data
+        </a>
+    </div>
+</div>
+
+{% endblock %}

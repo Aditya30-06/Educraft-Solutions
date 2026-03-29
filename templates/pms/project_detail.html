@@ -1,0 +1,111 @@
+{% extends "pms/base.html" %}
+{% block content %}
+
+<div class="detail-wrapper">
+
+    <a href="{{ url_for('pms_dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    <!-- HERO HEADER -->
+    <div class="detail-hero">
+        <div class="detail-hero-info">
+            <h1>{{ project.name }}</h1>
+            <p>{{ project.description }}</p>
+            <span class="badge {{ project.status|replace(' ','') }}">{{ project.status }}</span>
+        </div>
+
+        <!-- SVG Progress Ring -->
+        <div class="progress-ring-wrapper" id="ring-wrapper">
+            <svg width="110" height="110" viewBox="0 0 110 110">
+                <circle class="progress-ring-track" cx="55" cy="55" r="46" stroke-width="8" />
+                <circle class="progress-ring-fill" id="ring-fill" cx="55" cy="55" r="46" stroke-width="8"
+                    stroke-dasharray="289" stroke-dashoffset="289" />
+            </svg>
+            <div class="progress-ring-text">
+                <strong>{{ project.progress }}%</strong>
+                <span>Done</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- WIDE PROGRESS BAR -->
+    <div class="progress-bar-large">
+        <div class="progress-fill" data-progress="{{ project.progress }}"></div>
+    </div>
+
+    <!-- DETAIL CARDS -->
+    <div class="detail-grid">
+
+        <div class="card-box">
+            <h3>👤 Client Details</h3>
+            <p><b>Name</b> {{ project.client_name }}</p>
+            <p><b>Email</b> {{ project.client_email }}</p>
+            <p><b>Phone</b> {{ project.client_phone }}</p>
+        </div>
+
+        <div class="card-box">
+            <h3>📅 Timeline Info</h3>
+            <p><b>Start</b> {{ project.start_date }}</p>
+            <p><b>Deadline</b> {{ project.deadline }}</p>
+        </div>
+
+        <div class="card-box">
+            <h3>🛠 Tech Stack</h3>
+            <div style="margin-top:4px;">
+                {% for tech in project.tech_stack.split(',') %}
+                <span class="tech-badge">{{ tech.strip() }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MILESTONES AS TIMELINE -->
+    <div class="milestone-box">
+        <h3>Milestones</h3>
+        <div class="timeline-modern">
+
+            {% for item in milestones %}
+            <div class="timeline-row {% if item.done %}completed{% endif %}">
+
+                <div class="timeline-icon">
+                    {% if item.done %}
+                        ✓
+                    {% else %}
+                        ○
+                    {% endif %}
+                </div>
+
+                <div class="timeline-content-modern">
+                    <h4>{{ item.name }}</h4>
+
+                    {% if session.get('role') == 'admin' and not item.done %}
+                    <form action="{{ url_for('pms_complete_milestone', project_id=project.id, m_index=loop.index0) }}" method="POST">
+                        <button type="submit" class="checkbox-btn">
+                            Mark as Done
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var fill = document.getElementById('ring-fill');
+        if (!fill) return;
+        var circumference = 289;
+        var progress = parseInt("{{ project.progress }}");
+        var offset = circumference - (progress / 100) * circumference;
+        setTimeout(function () {
+            fill.style.strokeDashoffset = offset;
+        }, 150);
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Verify Email – EduCraft Solutions{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-bg">
+        <div class="auth-shape as1"></div>
+        <div class="auth-shape as2"></div>
+    </div>
+    <div class="auth-container" style="max-width:520px;grid-template-columns:1fr;margin:0 auto">
+        <div class="auth-form-wrap" style="padding:3rem 2.5rem">
+            <div class="auth-form-header" style="text-align:center">
+                <a href="{{ url_for('home') }}" class="auth-logo" style="display: block; margin-bottom: 1.5rem;">
+                    <img src="{{ url_for('static', filename='img/logo_blue_theme.png') }}" alt="EduCraft" style="height: 40px; margin: 0 auto; object-fit: contain;">
+                </a>
+                <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--teal),var(--primary));
+                            border-radius:50%;display:flex;align-items:center;justify-content:center;
+                            margin:0 auto 1.25rem;font-size:1.8rem;color:#fff">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2 style="color:var(--primary);margin-bottom:.5rem">Verify Your Email</h2>
+                <p style="color:var(--text-muted);font-size:.92rem">
+                    We sent a 6-digit OTP to<br>
+                    <strong style="color:var(--primary)">{{ email }}</strong>
+                </p>
+            </div>
+
+            <form class="auth-form" method="POST" action="{{ url_for('verify_otp') }}" style="margin-top:2rem">
+                <div class="form-group">
+                    <label style="text-align:center;display:block;margin-bottom:.6rem">Enter 6-Digit OTP</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-key"></i>
+                        <input type="text" name="otp"
+                               placeholder="• • • • • •"
+                               maxlength="6"
+                               pattern="\d{6}"
+                               inputmode="numeric"
+                               required
+                               autofocus
+                               style="letter-spacing:12px;font-size:1.4rem;font-weight:700;
+                                      text-align:center;padding-left:1rem">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" style="margin-top:.5rem">
+                    <i class="fas fa-check-circle"></i> Verify & Create Account
+                </button>
+            </form>
+
+            <div style="text-align:center;margin-top:1.75rem;display:flex;flex-direction:column;gap:.5rem">
+                <p style="color:var(--text-muted);font-size:.86rem">
+                    Didn't receive the OTP?
+                    <a href="{{ url_for('resend_otp') }}" style="color:var(--teal);font-weight:600">Resend OTP</a>
+                </p>
+                <p style="color:var(--text-muted);font-size:.78rem;display:flex;align-items:center;justify-content:center;gap:.4rem">
+                    <i class="fas fa-clock" style="color:var(--orange)"></i>
+                    OTP expires in 10 minutes
+                </p>
+                <p style="margin-top:.5rem">
+                    <a href="{{ url_for('signup') }}" style="color:var(--text-muted);font-size:.82rem">
+                        ← Back to Sign Up
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container { border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px rgba(26,60,110,.15); }
+</style>
+{% endblock %}

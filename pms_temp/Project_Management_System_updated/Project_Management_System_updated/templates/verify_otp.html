@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2>Enter OTP</h2>
+
+        <form method="POST">
+            <input name="otp" placeholder="Enter 6 digit OTP" required>
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

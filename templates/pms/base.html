@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard — EduCraft Solutions</title>
+    <!-- Google Fonts matching main site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome matching main site -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pms/style.css') }}">
+</head>
+
+<body id="body-root">
+
+    {% if session.get('user_id') %}
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand">
+            <img src="{{ url_for('static', filename='img/logo_blue_theme.png') }}" alt="EduCraft Solutions" class="nav-logo-img">
+            <div class="logo-text">
+                <span class="logo-main">EduCraft</span>
+                <span class="logo-sub">Solutions</span>
+            </div>
+        </a>
+        <div class="nav-right">
+            <button onclick="history.back()" class="nav-link back-btn" title="Go back" style="background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <a href="{{ url_for('pms_dashboard') }}" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            {% if session.get('role') == "admin" %}
+            <a href="{{ url_for('pms_add_project') }}" class="nav-link add-project-link"><i class="fas fa-plus"></i> New Project</a>
+            {% endif %}
+            <button id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+            <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+    {% else %}
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand">
+            <img src="{{ url_for('static', filename='img/logo_blue_theme.png') }}" alt="EduCraft Solutions" class="nav-logo-img">
+            <div class="logo-text">
+                <span class="logo-main">EduCraft</span>
+                <span class="logo-sub">Solutions</span>
+            </div>
+        </a>
+        <div class="nav-right">
+            <button id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+        </div>
+    </nav>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flash-list">
+        {% for msg in messages %}
+        <li class="flash-msg"><i class="fas fa-exclamation-triangle"></i> {{ msg }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% if session.get('user_id') and session.get('role') == "client" %}
+    <div id="chat-icon" title="Chat with Project Assistant">💬</div>
+
+    <div id="chatbot-box">
+        <div class="chat-header">Project Assistant</div>
+        <div id="chat-body"></div>
+        <div class="chat-input-row">
+            <input type="text" id="chat-input" placeholder="Ask about a project…">
+            <button id="chat-send">➤</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='pms/chatbot.js') }}"></script>
+    {% endif %}
+
+    <script>
+        // ── DARK / LIGHT MODE ──
+        const body = document.getElementById('body-root');
+        const toggle = document.getElementById('theme-toggle');
+
+        function applyTheme(dark) {
+            if (dark) {
+                body.classList.add('dark');
+                toggle.textContent = '☀️';
+            } else {
+                body.classList.remove('dark');
+                toggle.textContent = '🌙';
+            }
+        }
+
+        // Restore preference immediately to avoid flash
+        const saved = localStorage.getItem('pmsDark');
+        applyTheme(saved === 'true');
+
+        toggle.addEventListener('click', () => {
+            const nowDark = !body.classList.contains('dark');
+            applyTheme(nowDark);
+            localStorage.setItem('pmsDark', nowDark);
+        });
+
+        // ── PROGRESS BARS ──
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const val = bar.getAttribute('data-progress');
+                if (val) {
+                    setTimeout(() => {
+                        bar.style.width = val + '%';
+                    }, 100);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

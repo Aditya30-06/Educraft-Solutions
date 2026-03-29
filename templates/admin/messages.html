@@ -1,0 +1,110 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Contact Messages – Admin{% endblock %}
+{% block page_title %}Contact Messages{% endblock %}
+
+{% block content %}
+
+<!-- Google Sheets Banner -->
+<div class="sheets-banner" style="margin-bottom:1.25rem">
+    <div class="sheets-banner-text">
+        <div class="sheets-logo"><i class="fas fa-table"></i></div>
+        <div>
+            <strong>📊 Contact Messages — Live in Google Sheets</strong>
+            <span>New messages auto-sync to Sheet 1 every time a user submits the contact form.</span>
+        </div>
+    </div>
+    <div class="sheets-actions">
+        {% if gsheet_configured %}
+        <form method="POST" action="{{ url_for('admin_sync_sheets') }}" style="display:inline">
+            <button type="submit" class="btn-sync-sheet"><i class="fas fa-sync-alt"></i> Sync</button>
+        </form>
+        {% endif %}
+        <a href="{{ google_sheet_url }}" target="_blank" class="btn-open-sheet">
+            <i class="fas fa-table"></i> Click to See Live Data
+        </a>
+    </div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+    <h3 style="color:var(--primary);font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.5rem">
+        <i class="fas fa-envelope" style="color:var(--teal)"></i>
+        All Messages
+        <span class="badge b-teal">{{ messages|length }}</span>
+    </h3>
+</div>
+
+{% if messages %}
+    {% for m in messages %}
+    <div class="msg-card {% if not m.is_read %}unread{% endif %}">
+
+        <div class="msg-top">
+            <div>
+                <div class="msg-name">{{ m.name }}</div>
+                <div class="msg-email">
+                    <a href="mailto:{{ m.email }}" style="color:var(--teal)">{{ m.email }}</a>
+                    {% if m.phone %} &nbsp;·&nbsp; {{ m.phone }}{% endif %}
+                </div>
+            </div>
+            {% if m.service %}<span class="badge b-teal">{{ m.service }}</span>{% endif %}
+            {% if not m.is_read %}<span class="badge b-red">NEW</span>{% endif %}
+            <span class="msg-time">
+                <i class="fas fa-clock" style="margin-right:.28rem"></i>{{ m.submitted_at.strftime('%d %b %Y, %I:%M %p') }}
+            </span>
+        </div>
+
+        <div class="msg-text">{{ m.message }}</div>
+
+        {% if m.file_path %}
+        <div class="msg-attachment" style="margin-top: 10px;">
+            <a href="{{ url_for('download_upload', filename=m.file_path) }}" target="_blank" class="badge b-orange" style="text-decoration:none;">
+                <i class="fas fa-paperclip"></i> View Attached Document
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="msg-acts">
+            <button class="act-btn act-info" onclick="toggleReply('{{ m.id }}')">
+                <i class="fas fa-reply"></i> Reply via Email
+            </button>
+            <a href="mailto:{{ m.email }}?subject=Re%3A%20Your%20Enquiry%20%E2%80%93%20EduCraft%20Solutions&body=Hi%20{{ m.name | urlencode }}%2C%0A%0AThank%20you%20for%20contacting%20EduCraft%20Solutions.%0A%0A"
+               class="act-btn act-success">
+                <i class="fas fa-envelope"></i> Open in Mail
+            </a>
+            <form method="POST" action="{{ url_for('admin_delete_message', mid=m.id) }}"
+                  style="display:inline" onsubmit="return confirm('Delete this message permanently?')">
+                <button class="act-btn act-danger" type="submit">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </form>
+        </div>
+
+        <!-- Reply Box -->
+        <div class="reply-box" id="reply-{{ m.id }}">
+            <form method="POST" action="{{ url_for('admin_reply_message', mid=m.id) }}">
+                <label style="font-size:.8rem;font-weight:700;color:var(--primary);margin-bottom:.4rem;display:block">
+                    <i class="fas fa-reply" style="color:var(--teal)"></i>
+                    Reply to {{ m.name }} ({{ m.email }})
+                </label>
+                <textarea name="reply_text" placeholder="Type your reply..."></textarea>
+                <div class="reply-box-acts">
+                    <button type="submit" class="act-btn act-success">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                    <button type="button" class="act-btn act-info" onclick="toggleReply('{{ m.id }}')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No contact messages yet. They appear here when users submit the contact form.</p>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
